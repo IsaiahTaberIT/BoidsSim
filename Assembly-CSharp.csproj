@@ -61,6 +61,8 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.2.7f2\Editor\Data\Tools\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\SpecLog.cs" />
+    <Compile Include="Assets\BoidManager.cs" />
     <Compile Include="Assets\BoidBehavior.cs" />
     <Compile Include="Assets\GameController.cs" />
   </ItemGroup>
