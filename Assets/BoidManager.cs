@@ -18,11 +18,13 @@ public class BoidManager : MonoBehaviour
 
     [SerializeField] private float MaxAngleDelta = 5;
     [SerializeField] private float MaxAngleChangeRate = 0.25f;
+    [SerializeField] private BoundsHandler WorldBounds;
 
 
 
     private void Update()
     {
+        BoidBehavior.WorldBounds = WorldBounds;
         BoidBehavior.MaxAngleDelta = MaxAngleDelta;
         BoidBehavior.MaxAngleChangeRate = MaxAngleChangeRate;
         BoidBehavior.Speed = Speed;

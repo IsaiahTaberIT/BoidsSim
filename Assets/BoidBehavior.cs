@@ -4,7 +4,7 @@ using PersonalHelpers;
 using static UnityEngine.Mathf;
 public class BoidBehavior : MonoBehaviour
 {
-
+   public static BoundsHandler WorldBounds;
 
 
 
@@ -173,6 +173,7 @@ public class BoidBehavior : MonoBehaviour
     void Localbehavior()
     {
 
+        
         //init values
 
 
@@ -298,7 +299,20 @@ public class BoidBehavior : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        AngleDelta += Random.Range(-MaxAngleChangeRate, MaxAngleChangeRate);
+        if (WorldBounds != null && WorldBounds.BoundsRect.Contains(transform.position))
+        {
+
+        }
+        else
+        {
+            transform.position = Vector3.zero;
+        }
+
+
+
+
+
+            AngleDelta += Random.Range(-MaxAngleChangeRate, MaxAngleChangeRate);
 
         //float potentialoverflow = AngleDelta - (MaxAngleDelta * Sign(AngleDelta));
 
