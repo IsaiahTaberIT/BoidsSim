@@ -1,9 +1,54 @@
 using PersonalHelpers;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class BoidManager : MonoBehaviour 
 {
+
+
+    public float PanicIntensity;
+    public float SpawnRadius;
+    public GameObject BoidPrefab;
+    public int InspectorBoidCount;
+    public static int BoidCount;
+    public delegate void IntAction(int value);
+    public static Action SetBoidCount = () => { };
+
+
+    private void OnValidate()
+    {
+        if (Application.isPlaying)
+        {
+            CallBoidCount();
+
+        }
+    }
+
+
+
+    [ContextMenu("Invoke SetBoidCount")]
+
+    public void CallBoidCount()
+    {
+        SpawnRadius = Mathf.Min(new float[] {SpawnRadius, WorldBounds.BoundsRect.width / 2f - 5, WorldBounds.BoundsRect.height / 2f - 5});
+
+        BoidCount = InspectorBoidCount;
+        BoidBehavior.BoidCount = 0;
+        BoidManager.SetBoidCount.Invoke();
+
+        int NewBoidCount = BoidCount - BoidBehavior.BoidCount;
+
+        for (int i = 0; i < NewBoidCount; i++)
+        {
+            Vector2 pos = UnityEngine.Random.insideUnitCircle * SpawnRadius;
+            Instantiate(BoidPrefab, pos + WorldBounds.BoundsRect.center, Quaternion.identity);
+        }
+    }
+
+
+
+
     [Min(0.01f)][SerializeField] private float RepulsionFallOffPower = 2;
     [SerializeField] private bool DoLocalBehavior = true;
     [SerializeField] private float Speed = 5;
@@ -23,7 +68,11 @@ public class BoidManager : MonoBehaviour
 
 
     private void Update()
-    {
+    { 
+    
+        BoidBehavior.RepulsionFallOffPower = RepulsionFallOffPower;
+
+        BoidBehavior.PanicIntensity = PanicIntensity;
         BoidBehavior.WorldBounds = WorldBounds;
         BoidBehavior.MaxAngleDelta = MaxAngleDelta;
         BoidBehavior.MaxAngleChangeRate = MaxAngleChangeRate;

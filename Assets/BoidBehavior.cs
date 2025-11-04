@@ -4,10 +4,32 @@ using PersonalHelpers;
 using static UnityEngine.Mathf;
 public class BoidBehavior : MonoBehaviour
 {
-   public static BoundsHandler WorldBounds;
+    public static float PanicIntensity = 0.1f;
+    [SerializeField] private int BoidID;
+    public static int BoidCount;
+    
+    public static BoundsHandler WorldBounds;
 
+    public void CountSelf()
+    {
+        if (BoidCount >= BoidManager.BoidCount)
+        {
+            GameObject.Destroy(this.gameObject);
+        }
+        else
+        {
+            BoidCount++;
+        }
+    }
 
-
+    private void OnEnable()
+    {
+        BoidManager.SetBoidCount += CountSelf;
+    }
+    private void OnDisable()
+    {
+        BoidManager.SetBoidCount -= CountSelf;
+    }
 
 
     [SerializeField] private float AngleDelta = 0;
@@ -34,17 +56,24 @@ public class BoidBehavior : MonoBehaviour
     [SerializeField] private Vector3 NearestBoidPos;
     private bool started = false;
     private bool CollisionDataUsed = false;
-    private void OnTriggerStay2D(Collider2D collision)
-    {
 
+
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
         if (CollisionDataUsed)
         {
             CloseBoids.Clear();
             CollisionDataUsed = false;
         }
-
-
-
+    }
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (CollisionDataUsed)
+        {
+            CloseBoids.Clear();
+            CollisionDataUsed = false;
+        }
 
         if (collision.TryGetComponent<BoidBehavior>(out BoidBehavior b))
         {
@@ -191,19 +220,36 @@ public class BoidBehavior : MonoBehaviour
         Vector3 localCOM = Vector3.zero;
         Vector3 localAverageDirection = Vector3.zero;
         float cumulativeRepulsionWeight = 0;
+        float panic = 0;
 
         for (int i = 0; i < CloseBoids.Count; i++)
         {
+            if (CloseBoids[i] == null)
+            {
+                continue;
+            }
+
+
+
             localCOM += CloseBoids[i].transform.position;
             localAverageDirection += CloseBoids[i].transform.TransformDirection(Vector3.up);
 
 
             // normalizes a weight for the steering force to be applied where 1 is as close as possible and 0 is right at the edge of the detection range
 
-            float repulsionWeight = 1 - ((transform.position - CloseBoids[i].transform.position).magnitude)/RepulsionCollider.radius;
+            float repulsionWeight = 1 - ((transform.position - CloseBoids[i].transform.position).magnitude)/RepulsionCollider.radius / 2f;
+
+            Logger.Log("weight before",repulsionWeight);
+            Logger.Log(CloseBoids.Count);
+
 
             repulsionWeight = Pow(repulsionWeight, RepulsionFallOffPower);
 
+            Logger.Log("weight after", repulsionWeight);
+
+            // the more objects that are close to a given boid the more it will want to turn in it's chosen direction
+
+            panic += Abs(repulsionWeight);
 
             // applies the sign of the angle to the offending boid to indicate which direction this repulsion should be applied
 
@@ -247,7 +293,7 @@ public class BoidBehavior : MonoBehaviour
 
         if (CloseBoids.Count != 0)
         {
-            turnAngle -= (cumulativeRepulsionWeight) * SeparationStrength;
+            turnAngle -= (cumulativeRepulsionWeight) * SeparationStrength * Max(1,panic * PanicIntensity);
         }
 
 
@@ -299,6 +345,9 @@ public class BoidBehavior : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+
+
+
         if (WorldBounds != null && WorldBounds.BoundsRect.Contains(transform.position))
         {
 

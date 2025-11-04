@@ -105,23 +105,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f55a4d70c442ba4d99cf6425aeb3817, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  BoidID: 0
   AngleDelta: 0
-  MaxAngleDelta: 2
-  MaxAngleChangeRate: 0.2
-  RepulsionFallOffPower: 2
-  DoLocalBehavior: 1
   Logger:
     DoLogging: 0
-  Speed: 15.1
-  ViewRayCount: 10
-  ViewAngle: 300
-  TurnRate: 5000
-  ViewDistance: 6.47
   RepulsionCollider: {fileID: 0}
   FacingDirection: {x: -0.21572039, y: -0.97645533, z: 0}
-  SeparationStrength: 1
-  CohesionStrength: 5.36
-  AlignmentStrength: 3.25
   CloseBoids: []
   ObjectsToSense:
     serializedVersion: 2
@@ -162,7 +151,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0.21133333}
-  m_Radius: 15
+  m_Radius: 10
 --- !u!50 &-8278576761744751651
 Rigidbody2D:
   serializedVersion: 5
