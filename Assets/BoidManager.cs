@@ -2,11 +2,12 @@ using PersonalHelpers;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class BoidManager : MonoBehaviour 
 {
 
-
+    public UnityEvent< string> myCustomEvent;
     public float PanicIntensity;
     public float SpawnRadius;
     public GameObject BoidPrefab;
@@ -21,11 +22,18 @@ public class BoidManager : MonoBehaviour
         if (Application.isPlaying)
         {
             CallBoidCount();
-
         }
     }
 
+    public void test2()
+    {
 
+    }
+
+    public void test(string value = "")
+    {
+
+    }
 
     [ContextMenu("Invoke SetBoidCount")]
 

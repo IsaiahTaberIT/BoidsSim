@@ -4,6 +4,7 @@ using PersonalHelpers;
 using static UnityEngine.Mathf;
 public class BoidBehavior : MonoBehaviour
 {
+    
     public static float PanicIntensity = 0.1f;
     [SerializeField] private int BoidID;
     public static int BoidCount;
