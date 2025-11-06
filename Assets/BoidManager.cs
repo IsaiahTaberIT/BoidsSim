@@ -57,21 +57,21 @@ public class BoidManager : MonoBehaviour
 
 
 
-    [Min(0.01f)][SerializeField] private float RepulsionFallOffPower = 2;
-    [SerializeField] private bool DoLocalBehavior = true;
-    [SerializeField] private float Speed = 5;
-    [SerializeField] private int ViewRayCount;
-    [SerializeField] private float ViewAngle;
-    [SerializeField] private float TurnRate = 0.01f;
-    [SerializeField] private float ViewDistance;
-    [SerializeField] private float SeparationStrength = 5f;
-    [SerializeField] private float CohesionStrength = 5f;
-    [SerializeField] private float AlignmentStrength = 5f;
+    [Min(0.01f)]public float RepulsionFallOffPower = 2;
+    bool DoLocalBehavior = true;
+    public float Speed = 5;
+    public int ViewRayCount;
+    public float ViewAngle;
+    public float TurnRate = 0.01f;
+    public float ViewDistance;
+    public float SeparationStrength = 5f;
+    public float CohesionStrength = 5f;
+    public float AlignmentStrength = 5f;
 
 
-    [SerializeField] private float MaxAngleDelta = 5;
-    [SerializeField] private float MaxAngleChangeRate = 0.25f;
-    [SerializeField] private BoundsHandler WorldBounds;
+    public float MaxAngleDelta = 5;
+    public float MaxAngleChangeRate = 0.25f;
+    public BoundsHandler WorldBounds;
 
 
 
