@@ -1,9 +1,39 @@
+using JetBrains.Annotations;
+using System.Reflection;
 using UnityEngine;
 
 
 
 namespace PersonalHelpers
 {
+
+
+
+    public static class Processing
+    {
+        public static void SetValueWrapper(this MemberInfo info, object targetObject, object value)
+        {
+            if (info is FieldInfo f)
+            {
+                f.SetValue(targetObject, value);
+            }
+            else if (info is PropertyInfo p)
+            {
+                p.SetValue(targetObject, value);
+            }
+            else
+            {
+                Debug.Log("not found to be either");
+            }
+
+        }
+    }
+
+
+
+
+
+
     [System.Serializable ]
     public class SpecLog
     {

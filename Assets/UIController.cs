@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Reflection;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
-using static UnityEngine.Rendering.VolumeComponent;
+using static PersonalHelpers.Processing;
 
 
 
@@ -17,20 +18,20 @@ using static UnityEngine.Rendering.VolumeComponent;
 
 public class UIController : MonoBehaviour
 {
-    public Dictionary<UnityEngine.Object,int> ObjectIndicies = new Dictionary<UnityEngine.Object,int>();
+    public Dictionary<UnityEngine.Object, int> ObjectIndicies = new Dictionary<UnityEngine.Object, int>();
 
     public List<UISaveLoadWrapper> SaveLoadWrappers;
 
     [System.Serializable]
     public class UISaveLoadWrapper
     {
-      //  public int Index = -1;
+        //  public int Index = -1;
 
         public string m_TargetValue;
-              
+
         public string TargetValue {
             get
-                {
+            {
                 string potential = TryGetTargetValue();
 
                 if (potential != null)
@@ -45,7 +46,7 @@ public class UIController : MonoBehaviour
 
                 return m_TargetValue;
             }
-                
+
             set
             {
                 m_TargetValue = value;
@@ -56,7 +57,7 @@ public class UIController : MonoBehaviour
         public MonoBehaviour TargetClass;
         public string TargetVariableName;
         public UnityEngine.Object UIComponent;
-      //  public ComponentType UIComponentType;
+        //  public ComponentType UIComponentType;
         public string SaveLoadKey;
         public enum ComponentType
         {
@@ -118,48 +119,89 @@ public class UIController : MonoBehaviour
     }
 
 
-    void ParseStringToValueOfType(string str,int index)
+    void ParseStringToValueOfType(string str, int index)
     {
         System.Type type = SaveLoadWrappers[index].TargetClass.GetType();
-        FieldInfo info = type.GetField(SaveLoadWrappers[index].TargetVariableName);
-       // Type t = typeof(string);
-       Type t = info.FieldType;
+        FieldInfo infoF = type.GetField(SaveLoadWrappers[index].TargetVariableName);
+        PropertyInfo infoP = type.GetProperty(SaveLoadWrappers[index].TargetVariableName);
 
-        Debug.Log(t.Name);
+        string name = "";
+        MemberInfo info = null;
 
-        switch (t.Name)
+
+
+        if (infoF != null)
         {
-            case "String":
-                info.SetValue(SaveLoadWrappers[index].TargetClass, str);
-                break;
-            case "Single":
-
-                if (float.TryParse(str, out float sValue))
-                {
-                    info.SetValue(SaveLoadWrappers[index].TargetClass, sValue);
-                }
-                else
-                {
-                    Debug.Log("string is in incorrect format");
-                }
-                  
-                break;
-
-            case "Double":
-
-                if (double.TryParse(str, out double dValue))
-                {
-                    info.SetValue(SaveLoadWrappers[index].TargetClass, dValue);
-                }
-                else
-                {
-                    Debug.Log("string is in incorrect format");
-                }
-                break; 
-            default:
-                break;
+            name = infoF.FieldType.Name;
+            info = infoF;
         }
+        else if (infoP != null)
+        {
+            name = infoP.PropertyType.Name;
+            ;
+            info = infoP;
+
+        }
+        else
+        {
+            Debug.LogWarning("Member not a property or a field");
+
+            return;
+        }
+
+        Debug.Log(name);
+
+
+            switch (name)
+            {
+                case "String":
+                    info.SetValueWrapper(SaveLoadWrappers[index].TargetClass, str);
+                    break;
+                case "Single":
+                    if (float.TryParse(str, out float sValue))
+                    {
+                        info.SetValueWrapper(SaveLoadWrappers[index].TargetClass, sValue);
+                    }
+                    else
+                    {
+                        Debug.Log("string is in incorrect format");
+                    }
+
+                    break;
+
+                case "Int32":
+                    if (int.TryParse(str, out int iValue))
+                    {
+                        info.SetValueWrapper(SaveLoadWrappers[index].TargetClass, iValue);
+                    }
+                    else
+                    {
+                        Debug.Log("string is in incorrect format");
+                    }
+
+                    break;
+
+                case "Double":
+
+                    if (double.TryParse(str, out double dValue))
+                    {
+                        info.SetValueWrapper(SaveLoadWrappers[index].TargetClass, dValue);
+                    }
+                    else
+                    {
+                        Debug.Log("string is in incorrect format");
+                    }
+                    break;
+                default:
+                    break;
+            }
     }
+
+
+
+
+
+    
 
 
 

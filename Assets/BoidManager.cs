@@ -11,10 +11,50 @@ public class BoidManager : MonoBehaviour
     public float PanicIntensity;
     public float SpawnRadius;
     public GameObject BoidPrefab;
-    public int InspectorBoidCount;
+  
+
+
+    public int m_InspectorBoidCount;
+
+    public int InspectorBoidCount
+    {
+        get
+        {
+            return m_InspectorBoidCount;
+        }
+
+        set
+        {
+            m_InspectorBoidCount = value;
+            CallBoidCount();
+
+        }
+    }
+
+
+
+
+
     public static int BoidCount;
     public delegate void IntAction(int value);
     public static Action SetBoidCount = () => { };
+    [Min(0.01f)] public float RepulsionFallOffPower = 2;
+    bool DoLocalBehavior = true;
+    public float Speed = 5;
+    public int ViewRayCount;
+    public float ViewAngle;
+    public float TurnRate = 0.01f;
+    public float ViewDistance;
+    public float SeparationStrength = 5f;
+    public float CohesionStrength = 5f;
+    public float AlignmentStrength = 5f;
+
+
+    public float MaxAngleDelta = 5;
+    public float MaxAngleChangeRate = 0.25f;
+    public BoundsHandler WorldBounds;
+
+
 
 
     private void OnValidate()
@@ -55,23 +95,6 @@ public class BoidManager : MonoBehaviour
     }
 
 
-
-
-    [Min(0.01f)]public float RepulsionFallOffPower = 2;
-    bool DoLocalBehavior = true;
-    public float Speed = 5;
-    public int ViewRayCount;
-    public float ViewAngle;
-    public float TurnRate = 0.01f;
-    public float ViewDistance;
-    public float SeparationStrength = 5f;
-    public float CohesionStrength = 5f;
-    public float AlignmentStrength = 5f;
-
-
-    public float MaxAngleDelta = 5;
-    public float MaxAngleChangeRate = 0.25f;
-    public BoundsHandler WorldBounds;
 
 
 

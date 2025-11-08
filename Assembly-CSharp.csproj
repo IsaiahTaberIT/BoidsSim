@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\CameraMovementController.cs" />
+    <Compile Include="Assets\InputFieldScroller.cs" />
     <Compile Include="Assets\SpecLog.cs" />
     <Compile Include="Assets\UIController.cs" />
     <Compile Include="Assets\BoundsHandler.cs" />

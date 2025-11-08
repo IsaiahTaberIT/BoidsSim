@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 
 public class CameraMovementController : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerMoveHandler, IScrollHandler
 {
-    public void Fire(InputAction.CallbackContext context)
+    public void SetCtrlDown(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Canceled)
         {
@@ -27,7 +27,7 @@ public class CameraMovementController : MonoBehaviour, IPointerDownHandler, IPoi
     [SerializeField] private Camera MainCamera = new();
     [SerializeField] private SpecLog Logger = new();
     [SerializeField] private float ScrollRate = 1;
-    bool CrtlDown;
+    public static bool CrtlDown;
 
 
    Vector2 StartMousePos = Vector2.zero;
